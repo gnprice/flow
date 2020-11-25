@@ -249,7 +249,7 @@ if [[ "$quiet" -eq 0 ]]; then
 fi
 
 # Index N of results should correspond to the test at index N of dirs
-dirs=(tests/*/)
+dirs=(tests/warn*/)
 results=()
 
 # TODO possibly:
