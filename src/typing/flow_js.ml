@@ -5909,7 +5909,6 @@ struct
     (* Work has to happen when Empty flows to these types whether the EmptyT
        originates from generic testing or elsewhere. This logic was previously
        captured in ground_subtype. *)
-    | (_, UseT (_, OpenT _))
     | (_, UseT (_, TypeDestructorTriggerT _))
     | (_, ChoiceKitUseT _)
     | (_, CondT _)
