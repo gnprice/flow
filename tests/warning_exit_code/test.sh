@@ -20,16 +20,15 @@ printf "\n\n"
 # Kill the server before we mess around with the flowconfig.
 assert_ok "$FLOW" stop
 cp warn_flowconfig .flowconfig
-start_flow .
+
+echo "Status (No Running Server) With Warnings (zero exit code):"
+assert_ok "$FLOW" status --include-warnings
+printf "\n"
 
 echo "Status (Running Server) With Warnings (zero exit code):"
 assert_ok "$FLOW" status --include-warnings
 assert_errors "$FLOW" status --max-warnings 0
 assert_ok "$FLOW" status --max-warnings 1
-printf "\n"
-
-echo "Status (No Running Server) With Warnings (zero exit code):"
-assert_ok "$FLOW" status --include-warnings
 printf "\n"
 
 echo "Check Contents With Warnings (zero exit code):"
@@ -40,13 +39,12 @@ printf "\n"
 # Kill the server before we mess around with the flowconfig.
 assert_ok "$FLOW" stop
 cp error_flowconfig .flowconfig
-start_flow .
 
-echo "Status (Running Server) With Errors (nonzero exit code):"
+echo "Status (No Running Server) With Errors (nonzero exit code):"
 assert_errors "$FLOW" status --include-warnings
 printf "\n\n"
 
-echo "Status (No Running Server) With Errors (nonzero exit code):"
+echo "Status (Running Server) With Errors (nonzero exit code):"
 assert_errors "$FLOW" status --include-warnings
 printf "\n\n"
 
