@@ -2301,43 +2301,38 @@ struct
         (* logical types *)
         (*****************)
 
-        (* !x when x is of unknown truthiness *)
-        | (DefT (_, trust, BoolT None), NotT (reason, tout))
-        | (DefT (_, trust, StrT AnyLiteral), NotT (reason, tout))
-        | (DefT (_, trust, NumT AnyLiteral), NotT (reason, tout))
-        | (DefT (_, trust, MixedT Mixed_everything), NotT (reason, tout))
-        | (DefT (_, trust, MixedT Mixed_non_null), NotT (reason, tout))
-        | (DefT (_, trust, MixedT Mixed_non_void), NotT (reason, tout))
-        | (DefT (_, trust, MixedT Mixed_non_maybe), NotT (reason, tout)) ->
-          rec_flow_t
-            ~use_op:unknown_use
-            cx
-            trace
-            (BoolT.at (aloc_of_reason reason) trust, OpenT tout)
-        (* !x when x is falsy *)
-        | (DefT (_, trust, BoolT (Some false)), NotT (reason, tout))
-        | (DefT (_, trust, SingletonBoolT false), NotT (reason, tout))
-        | (DefT (_, trust, StrT (Literal (_, ""))), NotT (reason, tout))
-        | (DefT (_, trust, SingletonStrT ""), NotT (reason, tout))
-        | (DefT (_, trust, NumT (Literal (_, (0., _)))), NotT (reason, tout))
-        | (DefT (_, trust, SingletonNumT (0., _)), NotT (reason, tout))
-        | (DefT (_, trust, NullT), NotT (reason, tout))
-        | (DefT (_, trust, VoidT), NotT (reason, tout)) ->
-          let reason = replace_desc_reason (RBooleanLit true) reason in
-          rec_flow_t
-            ~use_op:unknown_use
-            cx
-            trace
-            (DefT (reason, trust, BoolT (Some true)), OpenT tout)
-        | (UnionT (_, rep), NotT _) -> flow_all_in_union cx trace rep u
-        (* !x when x is truthy *)
+        (* !x *)
+        | (UnionT (_, rep), NotT _) ->
+          flow_all_in_union cx trace rep u
         | (_, NotT (reason, tout)) ->
-          let reason = replace_desc_reason (RBooleanLit false) reason in
-          rec_flow_t
-            ~use_op:unknown_use
-            cx
-            trace
-            (DefT (reason, bogus_trust (), BoolT (Some false)), OpenT tout)
+          let t = match l of
+            (* when x is of unknown truthiness *)
+            | DefT (_, trust, BoolT None)
+            | DefT (_, trust, StrT AnyLiteral)
+            | DefT (_, trust, NumT AnyLiteral)
+            | DefT (_, trust, MixedT Mixed_everything)
+            | DefT (_, trust, MixedT Mixed_non_null)
+            | DefT (_, trust, MixedT Mixed_non_void)
+            | DefT (_, trust, MixedT Mixed_non_maybe) ->
+              BoolT.at (aloc_of_reason reason) trust
+            (* when x is falsy *)
+            | DefT (_, trust, BoolT (Some false))
+            | DefT (_, trust, SingletonBoolT false)
+            | DefT (_, trust, StrT (Literal (_, "")))
+            | DefT (_, trust, SingletonStrT "")
+            | DefT (_, trust, NumT (Literal (_, (0., _))))
+            | DefT (_, trust, SingletonNumT (0., _))
+            | DefT (_, trust, NullT)
+            | DefT (_, trust, VoidT) ->
+              let reason = replace_desc_reason (RBooleanLit true) reason in
+              DefT (reason, trust, BoolT (Some true))
+            (* when x is truthy *)
+            | _ ->
+              let reason = replace_desc_reason (RBooleanLit false) reason in
+              DefT (reason, bogus_trust (), BoolT (Some false))
+          in
+          rec_flow_t ~use_op:unknown_use cx trace (t, OpenT tout)
+        (* a && b *)
         | (left, AndT (_, right, u)) ->
           begin
             match left with
