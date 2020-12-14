@@ -2306,13 +2306,13 @@ struct
           flow_all_in_union cx trace rep u
         | (_, NotT (reason, tout)) ->
           let (trust, truthy) = match l of
+            | DefT (_, trust, MixedT Mixed_truthy)
+            | DefT (_, trust, MixedT Mixed_function) ->
+              (trust, Some true)
             | DefT (_, trust, BoolT None)
             | DefT (_, trust, StrT AnyLiteral)
             | DefT (_, trust, NumT AnyLiteral)
-            | DefT (_, trust, MixedT Mixed_everything)
-            | DefT (_, trust, MixedT Mixed_non_null)
-            | DefT (_, trust, MixedT Mixed_non_void)
-            | DefT (_, trust, MixedT Mixed_non_maybe) ->
+            | DefT (_, trust, MixedT _) ->
               (trust, None)
             | DefT (_, trust, BoolT (Some false))
             | DefT (_, trust, SingletonBoolT false)
