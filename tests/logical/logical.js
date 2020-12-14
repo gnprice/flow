@@ -526,6 +526,26 @@ function logical21(x: {y: string} & {}): void {
 /**
  * Unary not
  */
-function logical22(x: mixed): false {
+function logical22a(x: mixed): false {
   return !x; // error
+}
+function logical22b(x: mixed): false {
+  if (x === null) return false;
+  return !x; // error
+}
+function logical22c(x: mixed): false {
+  if (x === undefined) return false;
+  return !x; // error
+}
+function logical22d(x: mixed): false {
+  if (x == null) return false;
+  return !x; // error
+}
+function logical22e(x: mixed): false {
+  if (!x) return false;
+  return !x; // ok
+}
+function logical22f(x: mixed): false {
+  if (typeof x !== 'function') return false;
+  return !x; // ok
 }

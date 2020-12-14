@@ -462,10 +462,52 @@ Cannot return `!x` because boolean [1] is incompatible with boolean literal `fal
                  ^^ [1]
 
 References:
-   logical.js:529:31
-   529| function logical22(x: mixed): false {
-                                      ^^^^^ [2]
+   logical.js:529:32
+   529| function logical22a(x: mixed): false {
+                                       ^^^^^ [2]
+
+
+Error ------------------------------------------------------------------------------------------------ logical.js:534:10
+
+Cannot return `!x` because boolean [1] is incompatible with boolean literal `false` [2]. [incompatible-return]
+
+   logical.js:534:10
+   534|   return !x; // error
+                 ^^ [1]
+
+References:
+   logical.js:532:32
+   532| function logical22b(x: mixed): false {
+                                       ^^^^^ [2]
+
+
+Error ------------------------------------------------------------------------------------------------ logical.js:538:10
+
+Cannot return `!x` because boolean [1] is incompatible with boolean literal `false` [2]. [incompatible-return]
+
+   logical.js:538:10
+   538|   return !x; // error
+                 ^^ [1]
+
+References:
+   logical.js:536:32
+   536| function logical22c(x: mixed): false {
+                                       ^^^^^ [2]
+
+
+Error ------------------------------------------------------------------------------------------------ logical.js:542:10
+
+Cannot return `!x` because boolean [1] is incompatible with boolean literal `false` [2]. [incompatible-return]
+
+   logical.js:542:10
+   542|   return !x; // error
+                 ^^ [1]
+
+References:
+   logical.js:540:32
+   540| function logical22d(x: mixed): false {
+                                       ^^^^^ [2]
 
 
 
-Found 30 errors
+Found 33 errors
