@@ -2305,8 +2305,7 @@ struct
         | (UnionT (_, rep), NotT _) ->
           flow_all_in_union cx trace rep u
         | (_, NotT (reason, tout)) ->
-          let t = match l of
-            (* when x is of unknown truthiness *)
+          let (trust, truthy) = match l of
             | DefT (_, trust, BoolT None)
             | DefT (_, trust, StrT AnyLiteral)
             | DefT (_, trust, NumT AnyLiteral)
@@ -2314,8 +2313,7 @@ struct
             | DefT (_, trust, MixedT Mixed_non_null)
             | DefT (_, trust, MixedT Mixed_non_void)
             | DefT (_, trust, MixedT Mixed_non_maybe) ->
-              BoolT.at (aloc_of_reason reason) trust
-            (* when x is falsy *)
+              (trust, None)
             | DefT (_, trust, BoolT (Some false))
             | DefT (_, trust, SingletonBoolT false)
             | DefT (_, trust, StrT (Literal (_, "")))
@@ -2324,12 +2322,16 @@ struct
             | DefT (_, trust, SingletonNumT (0., _))
             | DefT (_, trust, NullT)
             | DefT (_, trust, VoidT) ->
-              let reason = replace_desc_reason (RBooleanLit true) reason in
-              DefT (reason, trust, BoolT (Some true))
-            (* when x is truthy *)
+              (trust, Some false)
             | _ ->
-              let reason = replace_desc_reason (RBooleanLit false) reason in
-              DefT (reason, bogus_trust (), BoolT (Some false))
+              (bogus_trust (), Some true)
+          in
+          let t = match truthy of
+            | Some truthy ->
+              let reason = replace_desc_reason (RBooleanLit (not truthy)) reason in
+              DefT (reason, trust, BoolT (Some (not truthy)))
+            | None ->
+              BoolT.at (aloc_of_reason reason) trust
           in
           rec_flow_t ~use_op:unknown_use cx trace (t, OpenT tout)
         (* a && b *)
