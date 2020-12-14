@@ -549,3 +549,7 @@ function logical22f(x: mixed): false {
   if (typeof x !== 'function') return false;
   return !x; // ok
 }
+function logical22g(x: mixed): false {
+  if (typeof x !== 'object') return false;
+  return !x; // ok TODO fails
+}
