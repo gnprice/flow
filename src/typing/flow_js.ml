@@ -2303,6 +2303,9 @@ struct
 
         (* !x *)
         | (UnionT (_, rep), NotT _) ->
+          (* TODO: handle this by fallthrough too?
+               Seems better in principle.  Behavior difference is the is_union_resolvable case
+               below; can that be made into a test? *)
           flow_all_in_union cx trace rep u
         | (_, NotT (reason, tout))
           when match l with
@@ -2310,7 +2313,7 @@ struct
                | OpaqueT _ -> false
                | _ -> true ->
           let (trust, truthy) = match l with
-            (* TODO: CharSetT empty? TypeT? *)
+            (* TODO: CharSetT empty? TypeT?... AnnotT? IntersectionT? EvalT? others... *)
             | DefT (_, trust, MixedT Mixed_truthy)
             | DefT (_, trust, MixedT Mixed_function) ->
               (trust, Some true)
@@ -2328,8 +2331,13 @@ struct
             | DefT (_, trust, NullT)
             | DefT (_, trust, VoidT) ->
               (trust, Some false)
-            | _ ->
+            | DefT _ ->
               (bogus_trust (), Some true)
+            | _ ->
+              (* Other types either should be handled by their own machinery instead of here
+                 (like UnionT, GenericT, ...), or truly might be either falsy or truthy. *)
+              (* TODO this probably causes errors; find them and fix *)
+              (bogus_trust (), None)
           in
           let t = match truthy with
             | Some truthy ->
