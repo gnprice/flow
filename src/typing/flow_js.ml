@@ -2306,6 +2306,7 @@ struct
           flow_all_in_union cx trace rep u
         | (_, NotT (reason, tout)) ->
           let (trust, truthy) = match l with
+            (* TODO: CharSetT empty? TypeT? *)
             | DefT (_, trust, MixedT Mixed_truthy)
             | DefT (_, trust, MixedT Mixed_function) ->
               (trust, Some true)
@@ -2323,6 +2324,9 @@ struct
             | DefT (_, trust, NullT)
             | DefT (_, trust, VoidT) ->
               (trust, Some false)
+            | OpaqueT _ ->
+              (* TODO: handle same-file? trust? bound? *)
+              (bogus_trust (), None)
             | _ ->
               (bogus_trust (), Some true)
           in

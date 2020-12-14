@@ -524,7 +524,7 @@ function logical21(x: {y: string} & {}): void {
 }
 
 /**
- * Unary not
+ * Unary not of mixed
  */
 function logical22a(x: mixed): false {
   return !x; // error
@@ -552,4 +552,37 @@ function logical22f(x: mixed): false {
 function logical22g(x: mixed): false {
   if (typeof x !== 'object') return false;
   return !x; // ok TODO fails
+}
+
+/**
+ * Unary not of opaque types
+ */
+import type {
+  OpaqueFalse, OpaqueTrue, OpaqueEmptyBoundFalse, OpaqueEmptyBoundTrue,
+} from './logical-extra.js';
+function logical23a(x: OpaqueFalse) {
+  (!x: false); // error
+  (!x: true); // error
+}
+function logical23b(x: OpaqueTrue) {
+  (!x: false); // error
+  (!x: true); // error
+}
+function logical23c(x: OpaqueEmptyBoundFalse) {
+  (!x: false); // error
+  (!x: true); // ok TODO FAILS
+}
+function logical23d(x: OpaqueEmptyBoundTrue) {
+  (!x: false); // ok TODO FAILS
+  (!x: true); // error
+}
+export opaque type OpaqueFalseLocal = false;
+export opaque type OpaqueTrueLocal = true;
+function logical23e(x: OpaqueFalseLocal) {
+  (!x: false); // error
+  (!x: true); // ok TODO FAILS
+}
+function logical23f(x: OpaqueTrueLocal) {
+  (!x: false); // ok TODO FAILS
+  (!x: true); // error
 }
