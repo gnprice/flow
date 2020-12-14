@@ -2305,7 +2305,7 @@ struct
         | (UnionT (_, rep), NotT _) ->
           flow_all_in_union cx trace rep u
         | (_, NotT (reason, tout)) ->
-          let (trust, truthy) = match l of
+          let (trust, truthy) = match l with
             | DefT (_, trust, MixedT Mixed_truthy)
             | DefT (_, trust, MixedT Mixed_function) ->
               (trust, Some true)
@@ -2326,7 +2326,7 @@ struct
             | _ ->
               (bogus_trust (), Some true)
           in
-          let t = match truthy of
+          let t = match truthy with
             | Some truthy ->
               let reason = replace_desc_reason (RBooleanLit (not truthy)) reason in
               DefT (reason, trust, BoolT (Some (not truthy)))
