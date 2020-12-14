@@ -522,3 +522,10 @@ function logical20(x: {y: string} & {}): void {
 function logical21(x: {y: string} & {}): void {
   ((x && x.y): number); // error, x.y is a string (no error about x)
 }
+
+/**
+ * Unary not
+ */
+function logical22(x: mixed): false {
+  return !x; // error
+}

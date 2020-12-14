@@ -2304,7 +2304,8 @@ struct
         (* !x when x is of unknown truthiness *)
         | (DefT (_, trust, BoolT None), NotT (reason, tout))
         | (DefT (_, trust, StrT AnyLiteral), NotT (reason, tout))
-        | (DefT (_, trust, NumT AnyLiteral), NotT (reason, tout)) ->
+        | (DefT (_, trust, NumT AnyLiteral), NotT (reason, tout))
+        | (DefT (_, trust, MixedT Mixed_everything), NotT (reason, tout)) ->
           rec_flow_t
             ~use_op:unknown_use
             cx
