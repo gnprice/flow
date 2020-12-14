@@ -570,19 +570,19 @@ function logical23b(x: OpaqueTrue) {
 }
 function logical23c(x: OpaqueEmptyBoundFalse) {
   (!x: false); // error
-  (!x: true); // ok TODO FAILS
+  (!x: true); // ok
 }
 function logical23d(x: OpaqueEmptyBoundTrue) {
-  (!x: false); // ok TODO FAILS
+  (!x: false); // ok
   (!x: true); // error
 }
 export opaque type OpaqueFalseLocal = false;
 export opaque type OpaqueTrueLocal = true;
 function logical23e(x: OpaqueFalseLocal) {
   (!x: false); // error
-  (!x: true); // ok TODO FAILS
+  (!x: true); // ok
 }
 function logical23f(x: OpaqueTrueLocal) {
-  (!x: false); // ok TODO FAILS
+  (!x: false); // ok
   (!x: true); // error
 }

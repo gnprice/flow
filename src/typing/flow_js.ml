@@ -2304,7 +2304,11 @@ struct
         (* !x *)
         | (UnionT (_, rep), NotT _) ->
           flow_all_in_union cx trace rep u
-        | (_, NotT (reason, tout)) ->
+        | (_, NotT (reason, tout))
+          when match l with
+               (* Let the opaque types machinery handle opaque types *)
+               | OpaqueT _ -> false
+               | _ -> true ->
           let (trust, truthy) = match l with
             (* TODO: CharSetT empty? TypeT? *)
             | DefT (_, trust, MixedT Mixed_truthy)
@@ -2324,9 +2328,6 @@ struct
             | DefT (_, trust, NullT)
             | DefT (_, trust, VoidT) ->
               (trust, Some false)
-            | OpaqueT _ ->
-              (* TODO: handle same-file? trust? bound? *)
-              (bogus_trust (), None)
             | _ ->
               (bogus_trust (), Some true)
           in

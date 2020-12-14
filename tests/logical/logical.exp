@@ -524,5 +524,121 @@ References:
                                        ^^^^^ [2]
 
 
+Error ------------------------------------------------------------------------------------------------- logical.js:564:4
 
-Found 34 errors
+`OpaqueFalse` [1] is not supported by unclassified use NotT. [incompatible-use]
+
+   logical.js:564:4
+   564|   (!x: false); // error
+           ^^
+
+References:
+   logical.js:563:24
+   563| function logical23a(x: OpaqueFalse) {
+                               ^^^^^^^^^^^ [1]
+
+
+Error ------------------------------------------------------------------------------------------------- logical.js:565:4
+
+`OpaqueFalse` [1] is not supported by unclassified use NotT. [incompatible-use]
+
+   logical.js:565:4
+   565|   (!x: true); // error
+           ^^
+
+References:
+   logical.js:563:24
+   563| function logical23a(x: OpaqueFalse) {
+                               ^^^^^^^^^^^ [1]
+
+
+Error ------------------------------------------------------------------------------------------------- logical.js:568:4
+
+`OpaqueTrue` [1] is not supported by unclassified use NotT. [incompatible-use]
+
+   logical.js:568:4
+   568|   (!x: false); // error
+           ^^
+
+References:
+   logical.js:567:24
+   567| function logical23b(x: OpaqueTrue) {
+                               ^^^^^^^^^^ [1]
+
+
+Error ------------------------------------------------------------------------------------------------- logical.js:569:4
+
+`OpaqueTrue` [1] is not supported by unclassified use NotT. [incompatible-use]
+
+   logical.js:569:4
+   569|   (!x: true); // error
+           ^^
+
+References:
+   logical.js:567:24
+   567| function logical23b(x: OpaqueTrue) {
+                               ^^^^^^^^^^ [1]
+
+
+Error ------------------------------------------------------------------------------------------------- logical.js:572:4
+
+Cannot cast `!x` to boolean literal `false` because boolean literal `true` [1] is incompatible with boolean literal
+`false` [2]. [incompatible-cast]
+
+   logical.js:572:4
+   572|   (!x: false); // error
+           ^^ [1]
+
+References:
+   logical.js:572:8
+   572|   (!x: false); // error
+               ^^^^^ [2]
+
+
+Error ------------------------------------------------------------------------------------------------- logical.js:577:4
+
+Cannot cast `!x` to boolean literal `true` because boolean literal `false` [1] is incompatible with boolean literal
+`true` [2]. [incompatible-cast]
+
+   logical.js:577:4
+   577|   (!x: true); // error
+           ^^ [1]
+
+References:
+   logical.js:577:8
+   577|   (!x: true); // error
+               ^^^^ [2]
+
+
+Error ------------------------------------------------------------------------------------------------- logical.js:582:4
+
+Cannot cast `!x` to boolean literal `false` because boolean literal `true` [1] is incompatible with boolean literal
+`false` [2]. [incompatible-cast]
+
+   logical.js:582:4
+   582|   (!x: false); // error
+           ^^ [1]
+
+References:
+   logical.js:582:8
+   582|   (!x: false); // error
+               ^^^^^ [2]
+
+
+Error ------------------------------------------------------------------------------------------------- logical.js:587:4
+
+Cannot cast `!x` to boolean literal `true` because boolean literal `false` [1] is incompatible with boolean literal
+`true` [2]. [incompatible-cast]
+
+   logical.js:587:4
+   587|   (!x: true); // error
+           ^^ [1]
+
+References:
+   logical.js:587:8
+   587|   (!x: true); // error
+               ^^^^ [2]
+
+
+
+Found 42 errors
