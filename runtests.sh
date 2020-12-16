@@ -252,6 +252,22 @@ fi
 dirs=(tests/*/)
 results=()
 
+# TODO possibly:
+#     manage parallelism ourselves?  That way we can fork straight into
+#     tests' subshells, without exec.  Have NPROCS worker subshells;
+#     they share an output pipe to echo results into, and an input
+#     pipe with test IDs.  The `read` builtin actually does one `read`
+#     syscall *per byte*, so no interference between different
+#     readers; if it didn't, could use fixed-size records.  On output
+#     be sure to do a single `echo` command, to keep it a single
+#     `write` syscall and therefore atomic between writers.
+#     Coordinator can take results in whatever order they come, store
+#     into an array in desired order, and have a finger sweeping
+#     through array to print.  Now coordinator isn't starting new tasks
+#     in the middle of the work, so no need for a particular form of
+#     waiting; just read all the output.  Then wait for all workers,
+#     with plain `wait`, but purely for cleanliness.
+
 if [[ "$list_tests" -eq 1 ]]; then
   for dir in "${dirs[@]}"; do
     dir=${dir%*/}
