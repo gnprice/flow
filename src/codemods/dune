@@ -6,4 +6,5 @@
     flow_annotate_exports_stubs
     flow_service_type_info
   )
+  (preprocess (pps ppx_let))
 )
