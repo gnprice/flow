@@ -4,4 +4,5 @@
   (libraries
     collections ; hack
     flow_parser
-    flow_parser_utils_aloc))
+    flow_parser_utils_aloc
+    flow_parser_utils_iloc))
