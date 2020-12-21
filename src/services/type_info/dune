@@ -2,6 +2,7 @@
   (name flow_service_type_info)
   (wrapped false)
   (libraries
+    flow_annotate_exports_stubs
     flow_common
     flow_common_lsp_conversions
     flow_parser
