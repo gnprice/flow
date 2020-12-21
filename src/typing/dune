@@ -51,6 +51,7 @@
     flow_typing_key
     flow_typing_polarity
     flow_typing_trust
+    flow_typing_generic
   )
   (preprocess (pps ppx_let))
 )

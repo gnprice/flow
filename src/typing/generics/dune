@@ -1,0 +1,8 @@
+(library
+ (name flow_typing_generic)
+ (wrapped false)
+ (libraries
+   flow_common
+ )
+ (preprocess (pps ppx_let))
+)
