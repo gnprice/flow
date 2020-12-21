@@ -82,12 +82,12 @@ val get_changes_since_mergebase : timeout:timeout -> env -> string list Lwt.t
 val get_mergebase :
   timeout:timeout ->
   watchman_instance ->
-  (watchman_instance * (string, string) Pervasives.result) Lwt.t
+  (watchman_instance * (string, string) Stdlib.result) Lwt.t
 
 val get_mergebase_and_changes :
   timeout:timeout ->
   watchman_instance ->
-  (watchman_instance * (string * SSet.t, string) Pervasives.result) Lwt.t
+  (watchman_instance * (string * SSet.t, string) Stdlib.result) Lwt.t
 
 val get_changes : ?deadline:float -> watchman_instance -> (watchman_instance * changes) Lwt.t
 
