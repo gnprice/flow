@@ -33,6 +33,7 @@
     commandUtils
   )
   (libraries
+    flow_codemods_utils
     flow_command_spec
     flow_commands_connect
     flow_common
