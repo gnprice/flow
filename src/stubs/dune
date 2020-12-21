@@ -1,4 +1,17 @@
 (library
+  (name flow_annotate_exports_stubs)
+  (wrapped false)
+  (modules
+    annotate_exports_hardcoded_expr_fixes
+    annotate_exports_hardcoded_module_fixes
+  )
+  (libraries
+    flow_codemods_utils
+    flow_parser
+  )
+)
+
+(library
   (name flow_logging_stubs)
   (wrapped false)
   (modules flowEventLogger flow_server_profile flowInteractionLogger)
