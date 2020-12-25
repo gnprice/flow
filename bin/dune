@@ -2,3 +2,9 @@
   (action (copy ../src/flow.exe flow))
   (mode promote)
 )
+
+(install
+  (section bin)
+  (package flowtype)
+  (files flow)
+)
