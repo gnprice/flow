@@ -2,6 +2,7 @@
   (name flow_package_heaps)
   (wrapped false)
   (libraries
+    heap_shared_mem
     flow_parser_utils
     flow_state_readers
   )
