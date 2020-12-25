@@ -4,6 +4,7 @@
   (libraries
     flow_common
     flow_monitor_rpc
+    flow_package_heaps
     flow_parser_utils
     flow_procs
     flow_shared_mem

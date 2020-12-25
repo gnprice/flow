@@ -1,0 +1,8 @@
+(library
+  (name flow_package_heaps)
+  (wrapped false)
+  (libraries
+    flow_parser_utils
+    flow_state_readers
+  )
+)
