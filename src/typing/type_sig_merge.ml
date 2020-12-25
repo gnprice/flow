@@ -7,6 +7,7 @@
 
 open Type_sig
 open Type_sig_collections
+open Type_sig_map
 module Pack = Type_sig_pack
 module Option = Base.Option
 module Fn = Base.Fn
