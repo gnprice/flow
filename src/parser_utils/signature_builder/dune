@@ -6,6 +6,6 @@
     flow_common
     flow_parser
   )
-  (preprocess (pps ppx_deriving.show))
+  (preprocess (pps ppx_deriving.show ppx_deriving.iter ppx_deriving.map))
 )
 
