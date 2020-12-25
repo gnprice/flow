@@ -8,7 +8,8 @@ _build
 .DS_STORE
 docs/_site/
 _site/
-/bin
+/bin/*
+!/bin/dune
 npm-debug.log
 /node_modules/
 /tests/*/*.err

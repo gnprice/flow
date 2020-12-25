@@ -1,0 +1,4 @@
+(rule
+  (action (copy ../src/flow.exe flow))
+  (mode promote)
+)
