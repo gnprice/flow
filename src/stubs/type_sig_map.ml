@@ -6,19 +6,28 @@
  *)
 
 let map_value _ _ _ = failwith "unimplemented"
+let iter_value _ _ _ = failwith "unimplemented"
 
 let map_def _ _ _ = failwith "unimplemented"
+let iter_def _ _ _ = failwith "unimplemented"
 
 let map_tparams _ _ _ = failwith "unimplemented"
+let iter_tparams _ _ _ = failwith "unimplemented"
 
 let map_annot _ _ _ = failwith "unimplemented"
+let iter_annot _ _ _ = failwith "unimplemented"
 
 let map_fun_sig _ _ _ = failwith "unimplemented"
+let iter_fun_sig _ _ _ = failwith "unimplemented"
 
 let map_class_sig _ _ _ = failwith "unimplemented"
+let iter_class_sig _ _ _ = failwith "unimplemented"
 
 let map_declare_class_sig _ _ _ = failwith "unimplemented"
+let iter_declare_class_sig _ _ _ = failwith "unimplemented"
 
 let map_interface_sig _ _ _ = failwith "unimplemented"
+let iter_interface_sig _ _ _ = failwith "unimplemented"
 
 let map_op _ _ = failwith "unimplemented"
+let iter_op _ _ = failwith "unimplemented"
