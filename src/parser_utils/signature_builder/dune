@@ -5,5 +5,7 @@
   (libraries
     flow_common
     flow_parser
-    ))
+  )
+  (preprocess (pps ppx_deriving.show))
+)
 
