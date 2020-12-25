@@ -8,5 +8,5 @@
     flow_type_sig_stubs
     flow_typing_polarity
   )
-  (preprocess (pps ppx_let))
+  (preprocess (pps ppx_let ppx_deriving.show ppx_deriving.map ppx_deriving.iter))
 )
