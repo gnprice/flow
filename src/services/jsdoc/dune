@@ -7,5 +7,5 @@
     flow_parser
     flow_parser_utils
     flow_state_heaps_parsing)
-  (preprocess (pps sedlex.ppx))
+  (preprocess (pps sedlex.ppx ppx_let ppx_deriving.show ppx_deriving.eq))
 )

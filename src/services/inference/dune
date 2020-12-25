@@ -34,6 +34,8 @@
   (wrapped false)
   (modules memory_utils)
   (libraries
+    cgroup
+    flow_common_lwt
     flow_monitor_rpc
     heap_shared_mem ; hack
   )
