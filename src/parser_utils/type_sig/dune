@@ -1,0 +1,13 @@
+(library
+  (name flow_parser_utils_type_sig)
+  (wrapped false)
+  (modules type_sig_pack type_sig type_sig_collections compact_table type_sig_parse)
+  (libraries
+    collections
+    flow_common_utils
+    flow_parser_utils
+    flow_type_sig_stubs
+    flow_typing_polarity
+  )
+  (preprocess (pps ppx_let))
+)
