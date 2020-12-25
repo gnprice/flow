@@ -1,0 +1,10 @@
+(library
+  (name flow_service_code_action)
+  (wrapped false)
+  (libraries
+    flow_common
+    flow_lsp
+    flow_typing_ty
+  )
+  (preprocess (pps lwt_ppx))
+)
