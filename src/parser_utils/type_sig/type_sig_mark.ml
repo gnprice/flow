@@ -15,9 +15,8 @@
  * collector, the marking process is used to detect what values are reachable so
  * the remainder can be discarded. *)
 
-(* open Type_sig *)
+open Type_sig
 open Type_sig_collections
-open Type_sig_map
 module P = Type_sig_parse
 module Option = Base.Option
 

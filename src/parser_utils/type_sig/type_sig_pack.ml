@@ -30,7 +30,6 @@
 
 open Type_sig
 open Type_sig_collections
-open Type_sig_map
 module P = Type_sig_parse
 module Fn = Base.Fn
 
