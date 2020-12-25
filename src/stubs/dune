@@ -28,7 +28,7 @@
 (library
   (name flow_type_sig_stubs)
   (wrapped false)
-  (modules type_sig_heap type_sig_map)
+  (modules type_sig_map)
 )
 
 (library
