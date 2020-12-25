@@ -42,7 +42,6 @@
     flow_exit_status
     flow_flowlib
     flow_monitor_options
-    flow_server
     flow_server_files
     flow_shared_mem
     find ; hack
