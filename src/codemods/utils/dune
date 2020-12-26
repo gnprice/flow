@@ -13,5 +13,5 @@
     flow_state_heaps_diffing
     flow_state_readers
   )
-  (preprocess (pps lwt_ppx))
+  (preprocess (pps lwt_ppx ppx_let))
 )
