@@ -1,6 +1,7 @@
 (library
   (name flow_monitor)
   (wrapped false)
+  (modules (:standard \ flowServerMonitorOptions))
   (libraries
     dfind_lwt
     flow_common
@@ -10,6 +11,7 @@
     flow_logging_utils
     flow_monitor_connections
     flow_monitor_logger
+    flow_monitor_options
     flow_monitor_utils
     flow_server
     flow_server_files
@@ -19,6 +21,17 @@
     semver
     socket
     watchman
+  )
+  (preprocess (pps lwt_ppx))
+)
+
+(library
+  (name flow_monitor_options)
+  (wrapped false)
+  (modules flowServerMonitorOptions)
+  (libraries
+    flow_common
+    flow_shared_mem
   )
   (preprocess (pps lwt_ppx))
 )

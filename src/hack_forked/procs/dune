@@ -5,7 +5,8 @@
     bucket)
   (libraries
     base
-    imported_core))
+    imported_core)
+  (preprocess (pps lwt_ppx)))
 
 (library
   (name procs_procs)
@@ -18,8 +19,10 @@
     base
     flow_exit_status
     heap_shared_mem
+    lwt.unix
     marshal_tools
     procs_bucket
     procfs
     sys_utils
-    worker_cancel))
+    worker_cancel)
+  (preprocess (pps lwt_ppx)))

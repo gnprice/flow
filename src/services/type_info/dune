@@ -9,6 +9,9 @@
     flow_parser_utils
     flow_server_env
     flow_server_protocol
+    flow_service_get_def
     flow_service_inference
+    flow_service_jsdoc
   )
+  (preprocess (pps ppx_let))
 )

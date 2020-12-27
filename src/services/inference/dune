@@ -1,6 +1,7 @@
 (library
   (name flow_service_inference)
   (wrapped false)
+  (modules (:standard \ memory_utils))
   (libraries
     flow_common
     flow_common_utils_filename_cache
@@ -24,6 +25,19 @@
     cgroup ; hack
     procs_bucket ; hack
     watchman
+  )
+  (preprocess (pps lwt_ppx))
+)
+
+(library
+  (name flow_shared_mem)
+  (wrapped false)
+  (modules memory_utils)
+  (libraries
+    cgroup
+    flow_common_lwt
+    flow_monitor_rpc
+    heap_shared_mem ; hack
   )
   (preprocess (pps lwt_ppx))
 )

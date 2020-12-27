@@ -5,6 +5,7 @@
     flow_common_build_id
     flow_common_profiling
     flow_config
+    flow_package_heaps
     flow_parser_utils
     flow_saved_state_stubs
     flow_server_env

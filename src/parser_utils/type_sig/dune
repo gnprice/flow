@@ -1,0 +1,11 @@
+(library
+  (name flow_parser_utils_type_sig)
+  (wrapped false)
+  (libraries
+    collections
+    flow_common_utils
+    flow_parser_utils
+    flow_typing_polarity
+  )
+  (preprocess (pps ppx_let ppx_deriving.show ppx_deriving.map ppx_deriving.iter))
+)
