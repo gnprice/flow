@@ -8460,11 +8460,8 @@ struct
               let reason_prop =
                 update_desc_reason (fun desc -> ROptional desc) reason_prop
               in
-              flow_lookup
-                (NonstrictReturning (None, None))
-                reason_prop
-                s
-                (Field (None, t, polarity))
+              let p_nonopt = Field (None, t, polarity) in
+              flow_lookup (NonstrictReturning (None, None)) reason_prop s p_nonopt
            | _ ->
               let reason_prop = mk_reason_prop s in
               flow_lookup (Strict lreason) reason_prop s p);
