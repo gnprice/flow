@@ -4,6 +4,22 @@
   (libraries
     sys_utils
   )
-  (preprocess (pps ppx_gen_flowlibs -- -flowlib ../../lib/ -prelude ../../prelude/))
-  (preprocessor_deps (source_tree lib/) (source_tree prelude/))
+  ; These paths lib/ and prelude/ are relative to the build context,
+  ; e.g. _build/default/.
+  (preprocess (pps ppx_gen_flowlibs -- -flowlib lib/ -prelude prelude/))
+  (preprocessor_deps copied-flowlib copied-prelude)
+)
+
+(rule
+  (target copied-flowlib)
+  ; These paths are, like in most places in a Dune file, relative to the
+  ; current build directory, e.g. _build/default/src/flowlib/.
+  (deps (glob_files ../../lib/*.js))
+  (action (with-stdout-to %{target} (run sha1sum %{deps})))
+)
+
+(rule
+  (target copied-prelude)
+  (deps (glob_files ../../prelude/*.js))
+  (action (with-stdout-to %{target} (run sha1sum %{deps})))
 )
