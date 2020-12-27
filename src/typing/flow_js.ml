@@ -8437,13 +8437,13 @@ struct
     let own_props = Context.find_props cx own_props_id in
     let proto_props = Context.find_props cx proto_props_id in
     let call_t = Base.Option.map call_id ~f:(Context.find_call cx) in
+    let mk_use_op prop =
+      Frame (PropertyCompatibility { prop; lower = lreason; upper = reason_struct },
+             use_op )
+    in
     own_props
     |> SMap.iter (fun s p ->
-           let use_op =
-             Frame
-               ( PropertyCompatibility { prop = Some s; lower = lreason; upper = reason_struct },
-                 use_op )
-           in
+           let use_op = mk_use_op (Some s) in
            match p with
            | Field (_, OptionalT { reason = _; type_ = t; use_desc = _ }, polarity) ->
              let propref =
@@ -8487,11 +8487,7 @@ struct
                    } ));
     proto_props
     |> SMap.iter (fun s p ->
-           let use_op =
-             Frame
-               ( PropertyCompatibility { prop = Some s; lower = lreason; upper = reason_struct },
-                 use_op )
-           in
+           let use_op = mk_use_op (Some s) in
            let propref =
              let reason_prop =
                update_desc_reason (fun desc -> RPropertyOf (s, desc)) reason_struct
@@ -8514,11 +8510,7 @@ struct
     call_t
     |> Base.Option.iter ~f:(fun ut ->
            let prop_name = Some "$call" in
-           let use_op =
-             Frame
-               ( PropertyCompatibility { prop = prop_name; lower = lreason; upper = reason_struct },
-                 use_op )
-           in
+           let use_op = mk_use_op prop_name in
            match lower with
            | DefT (_, _, ObjT { call_t = Some lid; _ })
            | DefT (_, _, InstanceT (_, _, _, { inst_call_t = Some lid; _ })) ->
