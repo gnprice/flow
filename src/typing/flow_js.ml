@@ -5583,7 +5583,6 @@ struct
                 lookup_action = action;
                 ids;
               } ) ->
-          (match propref with | Named (_, "a") | Named (_, "b") -> prerr_endline "lookup" | _ -> ());
           (match get_obj_prop cx trace o propref reason_op with
           | Some (p, target_kind) ->
             (match strict with
@@ -8440,7 +8439,6 @@ struct
     let call_t = Base.Option.map call_id ~f:(Context.find_call cx) in
     own_props
     |> SMap.iter (fun s p ->
-           prerr_endline (spf "structural_subtype own: %s" s);
            let use_op =
              Frame
                ( PropertyCompatibility { prop = Some s; lower = lreason; upper = reason_struct },
@@ -8475,7 +8473,6 @@ struct
                  } ));
     proto_props
     |> SMap.iter (fun s p ->
-           prerr_endline (spf "structural_subtype proto: %s" s);
            let use_op =
              Frame
                ( PropertyCompatibility { prop = Some s; lower = lreason; upper = reason_struct },
@@ -12080,7 +12077,6 @@ struct
              have to do that pinning more carefully, and using an unresolved
              tvar instead of a union here doesn't conflict with those plans.
           *)
-          TypeExSet.elements tset |> List.iter (fun t -> prerr_endline (Debug_js.dump_t cx t));
           TypeExSet.elements tset |> List.iter (fun t -> flow cx (t, UseT (use_op, elemt)));
 
           let t =
@@ -12280,9 +12276,7 @@ struct
         finish_call_t cx ?trace ~use_op ~reason_op funcalltype resolved tin
 
   and perform_lookup_action cx trace propref p target_kind lreason ureason = function
-    | LookupProp (use_op, up) ->
-       (match propref with | Named (_, "a") | Named (_, "b") -> prerr_endline "perform_lookup_action" | _ -> ());
-       rec_flow_p cx trace ~use_op lreason ureason propref (p, up)
+    | LookupProp (use_op, up) -> rec_flow_p cx trace ~use_op lreason ureason propref (p, up)
     | SuperProp (use_op, lp) -> rec_flow_p cx trace ~use_op ureason lreason propref (lp, p)
     | ReadProp { use_op; obj_t = _; tout } ->
       begin
@@ -12764,7 +12758,6 @@ struct
         | Named (_, x) -> Some x
         | Computed _ -> None
       in
-      (match x with Some "a" | Some "b" -> prerr_endline "flow_opt_p" | _ -> ());
       (match (Property.read_t lp, Property.read_t up) with
       | (Some lt, Some ut) -> flow_opt cx ?trace (lt, UseT (use_op, ut))
       | (None, Some _) when report_polarity ->
