@@ -12749,7 +12749,6 @@ struct
       (match (lt, ut) with
        | (OptionalT { type_ = lt; _ }, OptionalT { type_ = ut; _ })
        | (lt, ut) ->
-          prerr_endlinef "flow_opt_p";
           unify_opt cx ?trace ~use_op lt ut)
     (* directional cases *)
     | (lp, up) ->
