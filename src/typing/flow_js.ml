@@ -8442,9 +8442,10 @@ struct
              use_op )
     in
     let mk_reason_prop s = update_desc_reason (fun desc -> RPropertyOf (s, desc)) reason_struct in
-    let flow_lookup lookup_kind propref lookup_action =
+    let flow_lookup lookup_kind propref s prop =
       let reason = reason_struct in
       let ids = Some Properties.Set.empty in
+      let lookup_action = LookupProp (mk_use_op (Some s), prop) in
       let lookup =
         LookupT {reason; lookup_kind; ts = []; propref; lookup_action; ids} in
       rec_flow cx trace (lower, lookup)
@@ -8452,7 +8453,6 @@ struct
 
     own_props
     |> SMap.iter (fun s p ->
-           let use_op = mk_use_op (Some s) in
            let reason_prop = mk_reason_prop s in
            match p with
            | Field (_, OptionalT { reason = _; type_ = t; use_desc = _ }, polarity) ->
@@ -8465,16 +8465,16 @@ struct
              flow_lookup
                (NonstrictReturning (None, None))
                propref
-               (LookupProp (use_op, Field (None, t, polarity)))
+               s
+               (Field (None, t, polarity))
            | _ ->
              let propref = Named (mk_reason_prop s, s) in
-             flow_lookup (Strict lreason) propref (LookupProp (use_op, p)));
+             flow_lookup (Strict lreason) propref s p);
 
     proto_props
     |> SMap.iter (fun s p ->
-           let use_op = mk_use_op (Some s) in
            let propref = Named (mk_reason_prop s, s) in
-           flow_lookup (Strict lreason) propref (LookupProp (use_op, p)));
+           flow_lookup (Strict lreason) propref s p);
 
     call_t
     |> Base.Option.iter ~f:(fun ut ->
