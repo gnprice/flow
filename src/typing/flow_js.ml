@@ -5583,12 +5583,23 @@ struct
                 lookup_action = action;
                 ids;
               } ) ->
+          (* if inflowing type is literal (thus guaranteed to be
+             unaliased), propertywise subtyping is sound *)
+          let lit = is_literal_object_reason reason_obj in (* TODO also lflags.frozen *)
           (match get_obj_prop cx trace o propref reason_op with
           | Some (p, target_kind) ->
             (match strict with
             | NonstrictReturning (_, Some (id, _)) -> Context.test_prop_hit cx id
             | _ -> ());
-            perform_lookup_action cx trace propref p target_kind reason_obj reason_op action
+            (match lit, (name_of_propref propref), action with
+               true, Some s, LookupProp (use_op, up) ->
+                (* prop from unaliased LB: check <:, then make exact *)
+                (match (Property.read_t p, Property.read_t up) with
+                 | (Some lt, Some ut) -> rec_flow cx trace (lt, UseT (use_op, ut))
+                 | _ -> ());
+                speculative_object_write cx o.props_tmap s p
+             | _ ->
+                perform_lookup_action cx trace propref p target_kind reason_obj reason_op action)
           | None ->
             let strict =
               match (Obj_type.sealed_in_op reason_op o.flags.obj_kind, strict) with
