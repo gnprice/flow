@@ -8439,13 +8439,14 @@ struct
     let call_t = Base.Option.map call_id ~f:(Context.find_call cx) in
     own_props
     |> SMap.iter (fun s p ->
+           prerr_endline (spf "structural_subtype own: %s" s);
            let use_op =
              Frame
                ( PropertyCompatibility { prop = Some s; lower = lreason; upper = reason_struct },
                  use_op )
            in
            match p with
-           | Field (_, OptionalT { reason = _; type_ = t; use_desc = _ }, polarity) ->
+           | Field (_, OptionalT { reason = _; type_ = _; use_desc = _ }, _) ->
              let propref =
                let reason_prop =
                  update_desc_reason (fun desc -> ROptional (RPropertyOf (s, desc))) reason_struct
@@ -8462,7 +8463,7 @@ struct
                      lookup_kind = NonstrictReturning (None, None);
                      ts = [];
                      propref;
-                     lookup_action = LookupProp (use_op, Field (None, t, polarity));
+                     lookup_action = LookupProp (use_op, p);
                      ids = Some Properties.Set.empty;
                    } )
            | _ ->
