@@ -5583,7 +5583,7 @@ struct
                 lookup_action = action;
                 ids;
               } ) ->
-          (match propref with (Named (_, "a")) -> prerr_endline "lookup" | _ -> ());
+          (match propref with | Named (_, "a") | Named (_, "b") -> prerr_endline "lookup" | _ -> ());
           (match get_obj_prop cx trace o propref reason_op with
           | Some (p, target_kind) ->
             (match strict with
@@ -12296,7 +12296,7 @@ struct
 
   and perform_lookup_action cx trace propref p target_kind lreason ureason = function
     | LookupProp (use_op, up) ->
-       (match propref with (Named (_, "a")) -> prerr_endline "perform_lookup_action" | _ -> ());
+       (match propref with | Named (_, "a") | Named (_, "b") -> prerr_endline "perform_lookup_action" | _ -> ());
        rec_flow_p cx trace ~use_op lreason ureason propref (p, up)
     | SuperProp (use_op, lp) -> rec_flow_p cx trace ~use_op ureason lreason propref (lp, p)
     | ReadProp { use_op; obj_t = _; tout } ->
@@ -12775,7 +12775,7 @@ struct
         | Named (_, x) -> Some x
         | Computed _ -> None
       in
-      (match x with Some "a" -> prerr_endline "flow_opt_p" | _ -> ());
+      (match x with Some "a" | Some "b" -> prerr_endline "flow_opt_p" | _ -> ());
       (match (Property.read_t lp, Property.read_t up) with
       | (Some lt, Some ut) -> flow_opt cx ?trace (lt, UseT (use_op, ut))
       | (None, Some _) when report_polarity ->
