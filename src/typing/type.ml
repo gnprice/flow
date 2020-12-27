@@ -1466,9 +1466,8 @@ end = struct
     | Method (_, t) -> Some t
 
   let write_t ?(ctx = Normal) = function
-    | Field (_, t, _) when ctx = ThisInCtor -> Some t
     | Field (_, t, polarity) ->
-      if Polarity.compat (polarity, Negative) then
+      if ctx = ThisInCtor || Polarity.compat (polarity, Negative) then
         Some t
       else
         None
