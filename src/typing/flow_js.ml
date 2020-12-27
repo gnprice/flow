@@ -12713,7 +12713,10 @@ struct
   and flow_opt_p cx ?trace ~use_op ~report_polarity lreason ureason propref = function
     (* unification cases *)
     | (Field (_, lt, Polarity.Neutral), Field (_, ut, Polarity.Neutral)) ->
-      unify_opt cx ?trace ~use_op lt ut
+      (match (lt, ut) with
+       | (OptionalT { type_ = lt; _ }, OptionalT { type_ = ut; _ })
+       | (lt, ut) ->
+          unify_opt cx ?trace ~use_op lt ut)
     (* directional cases *)
     | (lp, up) ->
       let x =
