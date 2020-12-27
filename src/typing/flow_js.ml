@@ -8442,6 +8442,14 @@ struct
              use_op )
     in
     let mk_reason_prop s = update_desc_reason (fun desc -> RPropertyOf (s, desc)) reason_struct in
+    let flow_lookup lookup_kind propref lookup_action =
+      let reason = reason_struct in
+      let ids = Some Properties.Set.empty in
+      let lookup =
+        LookupT {reason; lookup_kind; ts = []; propref; lookup_action; ids} in
+      rec_flow cx trace (lower, lookup)
+    in
+
     own_props
     |> SMap.iter (fun s p ->
            let use_op = mk_use_op (Some s) in
@@ -8454,51 +8462,20 @@ struct
                in
                Named (reason_prop, s)
              in
-             rec_flow
-               cx
-               trace
-               ( lower,
-                 LookupT
-                   {
-                     reason = reason_struct;
-                     lookup_kind = NonstrictReturning (None, None);
-                     ts = [];
-                     propref;
-                     lookup_action = LookupProp (use_op, Field (None, t, polarity));
-                     ids = Some Properties.Set.empty;
-                   } )
+             flow_lookup
+               (NonstrictReturning (None, None))
+               propref
+               (LookupProp (use_op, Field (None, t, polarity)))
            | _ ->
              let propref = Named (mk_reason_prop s, s) in
-             rec_flow
-               cx
-               trace
-               ( lower,
-                 LookupT
-                   {
-                     reason = reason_struct;
-                     lookup_kind = Strict lreason;
-                     ts = [];
-                     propref;
-                     lookup_action = LookupProp (use_op, p);
-                     ids = Some Properties.Set.empty;
-                   } ));
+             flow_lookup (Strict lreason) propref (LookupProp (use_op, p)));
+
     proto_props
     |> SMap.iter (fun s p ->
            let use_op = mk_use_op (Some s) in
            let propref = Named (mk_reason_prop s, s) in
-           rec_flow
-             cx
-             trace
-             ( lower,
-               LookupT
-                 {
-                   reason = reason_struct;
-                   lookup_kind = Strict lreason;
-                   ts = [];
-                   propref;
-                   lookup_action = LookupProp (use_op, p);
-                   ids = Some Properties.Set.empty;
-                 } ));
+           flow_lookup (Strict lreason) propref (LookupProp (use_op, p)));
+
     call_t
     |> Base.Option.iter ~f:(fun ut ->
            let prop_name = Some "$call" in
