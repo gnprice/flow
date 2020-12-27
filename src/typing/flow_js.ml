@@ -8441,14 +8441,16 @@ struct
       Frame (PropertyCompatibility { prop; lower = lreason; upper = reason_struct },
              use_op )
     in
+    let mk_reason_prop s = update_desc_reason (fun desc -> RPropertyOf (s, desc)) reason_struct in
     own_props
     |> SMap.iter (fun s p ->
            let use_op = mk_use_op (Some s) in
+           let reason_prop = mk_reason_prop s in
            match p with
            | Field (_, OptionalT { reason = _; type_ = t; use_desc = _ }, polarity) ->
              let propref =
                let reason_prop =
-                 update_desc_reason (fun desc -> ROptional (RPropertyOf (s, desc))) reason_struct
+                 update_desc_reason (fun desc -> ROptional desc) reason_prop
                in
                Named (reason_prop, s)
              in
@@ -8466,12 +8468,7 @@ struct
                      ids = Some Properties.Set.empty;
                    } )
            | _ ->
-             let propref =
-               let reason_prop =
-                 update_desc_reason (fun desc -> RPropertyOf (s, desc)) reason_struct
-               in
-               Named (reason_prop, s)
-             in
+             let propref = Named (mk_reason_prop s, s) in
              rec_flow
                cx
                trace
@@ -8488,12 +8485,7 @@ struct
     proto_props
     |> SMap.iter (fun s p ->
            let use_op = mk_use_op (Some s) in
-           let propref =
-             let reason_prop =
-               update_desc_reason (fun desc -> RPropertyOf (s, desc)) reason_struct
-             in
-             Named (reason_prop, s)
-           in
+           let propref = Named (mk_reason_prop s, s) in
            rec_flow
              cx
              trace
@@ -8517,9 +8509,7 @@ struct
              let lt = Context.find_call cx lid in
              rec_flow cx trace (lt, UseT (use_op, ut))
            | _ ->
-             let reason_prop =
-               update_desc_reason (fun desc -> RPropertyOf ("$call", desc)) reason_struct
-             in
+             let reason_prop = mk_reason_prop "$call" in
              let error_message =
                if is_builtin_reason ALoc.source lreason then
                  Error_message.EBuiltinLookupFailed { reason = reason_prop; name = prop_name }
