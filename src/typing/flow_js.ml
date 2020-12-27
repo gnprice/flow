@@ -8442,14 +8442,25 @@ struct
              use_op )
     in
     let mk_reason_prop s = update_desc_reason (fun desc -> RPropertyOf (s, desc)) reason_struct in
+    let lobj = match lower with DefT (_, _, ObjT o) -> Some o | _ -> None in
+    let lit = is_literal_object_reason lreason in (* TODO also lflags.frozen *)
     let flow_lookup lookup_kind reason_prop s prop =
-      let reason = reason_struct in
-      let propref = Named (reason_prop, s) in
-      let ids = Some Properties.Set.empty in
-      let lookup_action = LookupProp (mk_use_op (Some s), prop) in
-      let lookup =
-        LookupT {reason; lookup_kind; ts = []; propref; lookup_action; ids} in
-      rec_flow cx trace (lower, lookup)
+      let use_op = mk_use_op (Some s) in
+      let lp = Base.Option.bind lobj (fun o -> Context.get_prop cx o.props_tmap s) in
+      (match lit, lobj, lp with
+       | true, Some o, Some lp ->
+          (match (Property.read_t lp, Property.read_t prop) with
+           | (Some lt, Some ut) -> rec_flow cx trace (lt, UseT (use_op, ut))
+           | _ -> ());
+          speculative_object_write cx o.props_tmap s lp
+       | _ ->
+          let reason = reason_struct in
+          let propref = Named (reason_prop, s) in
+          let ids = Some Properties.Set.empty in
+          let lookup_action = LookupProp (use_op, prop) in
+          let lookup =
+            LookupT {reason; lookup_kind; ts = []; propref; lookup_action; ids} in
+          rec_flow cx trace (lower, lookup))
     in
 
     own_props
