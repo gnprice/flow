@@ -8454,9 +8454,9 @@ struct
 
     own_props
     |> SMap.iter (fun s p ->
-           let reason_prop = mk_reason_prop s in
            match p with
            | Field (_, OptionalT { reason = _; type_ = t; use_desc = _ }, polarity) ->
+              let reason_prop = mk_reason_prop s in
               let reason_prop =
                 update_desc_reason (fun desc -> ROptional desc) reason_prop
               in
@@ -8466,6 +8466,7 @@ struct
                 s
                 (Field (None, t, polarity))
            | _ ->
+              let reason_prop = mk_reason_prop s in
               flow_lookup (Strict lreason) reason_prop s p);
 
     proto_props
