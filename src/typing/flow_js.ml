@@ -8446,48 +8446,33 @@ struct
                ( PropertyCompatibility { prop = Some s; lower = lreason; upper = reason_struct },
                  use_op )
            in
-           match p with
-           | Field (_, OptionalT { reason = _; type_ = _; use_desc = _ }, _) ->
-             prerr_endline (spf "structural_subtype: optional");
-             let propref =
-               let reason_prop =
-                 update_desc_reason (fun desc -> ROptional (RPropertyOf (s, desc))) reason_struct
-               in
-               Named (reason_prop, s)
+           let (desc_update, lookup_kind) =
+             match p with
+             | Field (_, OptionalT _, _) ->
+                ((fun desc -> ROptional (RPropertyOf (s, desc))),
+                 NonstrictReturning (None, None))
+             | _ ->
+                ((fun desc -> RPropertyOf (s, desc)),
+                 Strict lreason)
+           in
+           let propref =
+             let reason_prop = update_desc_reason desc_update reason_struct
              in
-             rec_flow
-               cx
-               trace
-               ( lower,
-                 LookupT
-                   {
-                     reason = reason_struct;
-                     lookup_kind = NonstrictReturning (None, None);
-                     ts = [];
-                     propref;
-                     lookup_action = LookupProp (use_op, p);
-                     ids = Some Properties.Set.empty;
-                   } )
-           | _ ->
-             let propref =
-               let reason_prop =
-                 update_desc_reason (fun desc -> RPropertyOf (s, desc)) reason_struct
-               in
-               Named (reason_prop, s)
-             in
-             rec_flow
-               cx
-               trace
-               ( lower,
-                 LookupT
-                   {
-                     reason = reason_struct;
-                     lookup_kind = Strict lreason;
-                     ts = [];
-                     propref;
-                     lookup_action = LookupProp (use_op, p);
-                     ids = Some Properties.Set.empty;
-                   } ));
+             Named (reason_prop, s)
+           in
+           rec_flow
+             cx
+             trace
+             ( lower,
+               LookupT
+                 {
+                   reason = reason_struct;
+                   lookup_kind;
+                   ts = [];
+                   propref;
+                   lookup_action = LookupProp (use_op, p);
+                   ids = Some Properties.Set.empty;
+                 } ));
     proto_props
     |> SMap.iter (fun s p ->
            prerr_endline (spf "structural_subtype proto: %s" s);
