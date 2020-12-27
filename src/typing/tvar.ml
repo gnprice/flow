@@ -11,8 +11,8 @@ let mk_no_wrap cx reason =
   Context.add_tvar cx tvar (Constraint.new_unresolved_root ());
   if Context.is_verbose cx then
     Utils_js.prerr_endlinef
-      "TVAR %d (%d): %s"
-      tvar
+      "TVAR %s (%d): %s"
+      (Debug_js.dump_tvar_id cx tvar)
       (IMap.cardinal graph)
       (Debug_js.string_of_reason cx reason);
   tvar

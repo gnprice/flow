@@ -631,7 +631,7 @@ and dump_use_t_ (depth, tvars) cx t =
   else
     match t with
     | UseT (use_op, OpenT (r, id)) ->
-      spf "UseT (%s, OpenT (%S, %d))" (string_of_use_op use_op) (dump_reason cx r) id
+      spf "UseT (%s, OpenT (%S, %s))" (string_of_use_op use_op) (dump_reason cx r) (dump_tvar_id_ cx id)
     | UseT (use_op, (DefT (_, trust, _) as t)) ->
       spf
         "UseT (%s, %s%s)"
@@ -888,24 +888,32 @@ and dump_use_t_ (depth, tvars) cx t =
              (use_kid upper))
     | ModuleExportsAssignT (_, _, _) -> p t
 
+and dump_tvar_id_ _ id =
+  Tty.(
+    let c = match id mod 6 with
+      | 0 -> Red | 1 -> Green | 2 -> Yellow | 3 -> Blue | 4 -> Magenta | 5 -> Cyan
+      | _ -> failwith "dump_tvar_id_ modulus"
+    in
+    apply_color ?color_mode:(Some Color_Always) (Normal c) (spf "%d" id))
+
 and dump_tvar_ (depth, tvars) cx id =
   if ISet.mem id tvars then
-    spf "%d, ^" id
+    spf "%s, ^" (dump_tvar_id_ cx id)
   else
     let stack = ISet.add id tvars in
     Constraint.(
       try
         match Context.find_tvar cx id with
-        | Goto g -> spf "%d, Goto %d" id g
+        | Goto g -> spf "%s, Goto %s" (dump_tvar_id_ cx id) (dump_tvar_id_ cx g)
         | Root { constraints = Resolved (_, t) | FullyResolved (_, t); _ } ->
-          spf "%d, Resolved %s" id (dump_t_ (depth - 1, stack) cx t)
+          spf "%s, Resolved %s" (dump_tvar_id_ cx id) (dump_t_ (depth - 1, stack) cx t)
         | Root { constraints = Unresolved { lower; upper; _ }; _ } ->
           if lower = TypeMap.empty && upper = UseTypeMap.empty then
-            spf "%d" id
+            dump_tvar_id_ cx id
           else
             spf
-              "%d, [%s], [%s]"
-              id
+              "%s, [%s], [%s]"
+              (dump_tvar_id_ cx id)
               (String.concat
                  "; "
                  (List.rev
@@ -917,7 +925,7 @@ and dump_tvar_ (depth, tvars) cx id =
                        (fun (use_t, _) _ acc -> dump_use_t_ (depth - 1, stack) cx use_t :: acc)
                        upper
                        [])))
-      with Context.Tvar_not_found _ -> spf "Not Found: %d" id)
+      with Context.Tvar_not_found _ -> spf "Not Found: %s" (dump_tvar_id_ cx id))
 
 and dump_prop_ (depth, tvars) cx p =
   let kid t = dump_t_ (depth, tvars) cx t in
@@ -937,6 +945,8 @@ let dump_t ?(depth = 3) cx t = dump_t_ (depth, ISet.empty) cx t
 let dump_use_t ?(depth = 3) cx t = dump_use_t_ (depth, ISet.empty) cx t
 
 let dump_prop ?(depth = 3) cx p = dump_prop_ (depth, ISet.empty) cx p
+
+let dump_tvar_id cx id = dump_tvar_id_ cx id
 
 let dump_tvar ?(depth = 3) cx id = dump_tvar_ (depth, ISet.empty) cx id
 
